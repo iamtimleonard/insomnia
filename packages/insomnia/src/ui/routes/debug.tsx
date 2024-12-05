@@ -1227,6 +1227,7 @@ const CollectionGridListItem = ({
 }): React.ReactNode => {
   const [isEditable, setIsEditable] = useState(false);
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
+  const [contextMenuPosition, setContextMenuPostion] = useState<{ x: number | null; y: number | null }>({ x: null, y: null });
 
   const action = isRequestGroup(item.doc) ? `/organization/${organizationId}/project/${projectId}/workspace/${workspaceId}/debug/request-group/${item.doc._id}/update` : `/organization/${organizationId}/project/${projectId}/workspace/${workspaceId}/debug/request/${item.doc._id}/update`;
 
@@ -1250,6 +1251,7 @@ const CollectionGridListItem = ({
         onContextMenu={e => {
           e.preventDefault();
           setIsContextMenuOpen(true);
+          setContextMenuPostion({ x: e.clientX, y: e.clientY });
         }}
         onDoubleClick={() => setIsEditable(true)}
         data-selected={isSelected}
@@ -1324,6 +1326,8 @@ const CollectionGridListItem = ({
             onRename={() => setIsEditable(true)}
             isOpen={isContextMenuOpen}
             onOpenChange={setIsContextMenuOpen}
+            contextMenuPosition={contextMenuPosition}
+            setContextMenuPosition={setContextMenuPostion}
           />
         ) : (
           <RequestActionsDropdown
@@ -1334,6 +1338,8 @@ const CollectionGridListItem = ({
             isPinned={item.pinned}
             isOpen={isContextMenuOpen}
             onOpenChange={setIsContextMenuOpen}
+            contextMenuPosition={contextMenuPosition}
+            setContextMenuPosition={setContextMenuPostion}
           />
         )}
       </div>

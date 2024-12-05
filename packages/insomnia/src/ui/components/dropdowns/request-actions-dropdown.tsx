@@ -38,6 +38,8 @@ interface Props {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   onRename: () => void;
+  contextMenuPosition: { x: number | null; y: number | null };
+  setContextMenuPosition: (position: { x: number | null; y: number | null }) => void;
 }
 
 export const RequestActionsDropdown = ({
@@ -48,6 +50,8 @@ export const RequestActionsDropdown = ({
   isOpen,
   onOpenChange,
   onRename,
+  contextMenuPosition,
+  setContextMenuPosition,
 }: Props) => {
   const {
     settings,
@@ -265,6 +269,7 @@ export const RequestActionsDropdown = ({
       <MenuTrigger
         isOpen={isOpen}
         onOpenChange={isOpen => {
+          setContextMenuPosition({ x: null, y: null });
           isOpen && onOpen();
           onOpenChange(isOpen);
         }}
@@ -283,6 +288,7 @@ export const RequestActionsDropdown = ({
             onAction={key => requestActionList.find(i => i.items.find(a => a.id === key))?.items.find(a => a.id === key)?.action()}
             items={requestActionList}
             className="border select-none text-sm min-w-max border-solid border-[--hl-sm] shadow-lg bg-[--color-bg] py-2 rounded-md overflow-y-auto max-h-[85vh] focus:outline-none"
+            style={(contextMenuPosition.x && contextMenuPosition.y) ? { position: 'fixed', top: contextMenuPosition.y, left: contextMenuPosition.x } : {}}
           >
             {section => (
               <Section className='flex-1 flex flex-col'>
